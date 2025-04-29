@@ -1,38 +1,31 @@
-// Results.js
-import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import { UserContext } from './UserContext';
+import Loader from './Loader';
 
-const Results = ({ element, artwork }) => {
+export default function Results() {
+  const { element, artwork } = useContext(UserContext);
+
+  if (!element || !artwork) {
+    return <Loader message="Loading your results..." />;
+  }
+
   return (
     <div>
       <h2>Your Element: {element}</h2>
-      <div className="artwork-container"> {/* Add this container for centering */}
-        {artwork ? (
+      <div className="artwork-container">
+        {artwork.primaryImage ? (
           <img
             className="artwork-image"
             src={artwork.primaryImage}
             alt={artwork.title}
           />
         ) : (
-          <div className="artwork-placeholder">
-            No Artwork Found
-          </div>
+          <div className="artwork-placeholder">No Artwork Found</div>
         )}
       </div>
-      <h3>{artwork?.title || 'Unknown Title'}</h3>
-      <p>{artwork?.artistDisplayName || 'Unknown Artist'}</p>
-      <p>{artwork?.objectDate || 'Unknown Date'}</p>
+      <h3>{artwork.title}</h3>
+      <p>{artwork.artistDisplayName}</p>
+      <p>{artwork.objectDate}</p>
     </div>
   );
-};
-
-Results.propTypes = {
-  element: PropTypes.string.isRequired,
-  artwork: PropTypes.shape({
-    primaryImage: PropTypes.string,
-    title: PropTypes.string,
-    artistDisplayName: PropTypes.string,
-    objectDate: PropTypes.string,
-  }),
-};
-
-export default Results;
+}
